@@ -13,8 +13,23 @@
 </head>
 
 <body>
+    <div class="header">
+        <div class="container">
+            {% include 'menu.html' %}
     
-{% include 'header.html' %}
+            {% block banner %}
+            
+    
+           
+            
+            {% endblock banner %}
+    
+            
+    
+        </div>
+    </div>
+    
+   
     {% block content %}
 
 
