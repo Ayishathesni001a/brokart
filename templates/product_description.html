@@ -5,43 +5,36 @@
 
     <div class="row">
         <div class="col-2">
-             <img src="{% static 'images/gallery-1.jpg' %}" id="ProductImg" width="100%">
+             <img src="{{ product.image.url }}" id="ProductImg" width="100%">
 
-            <div class="small-img-row">
-               <div class="small-img-col">
-                <img src="{% static 'images/gallery-1.jpg' %}" class="small-img" width="100%">
-            </div>
-               <div class="small-img-col">
-                <img src="{% static 'images/gallery-2.jpg' %}" class="small-img" width="100%">
-                </div>
-            <div class="small-img-col">
-                <img src="{% static 'images/gallery-3.jpg' %}" class="small-img" width="100%">
-            </div>
-            <div class="small-img-col">
-                <img src="{% static 'images/gallery-4.jpg' %}" class="small-img" width="100%">
-            </div>
+            
         </div>
 
     </div>
     <div class="col-2">
-        <p>Home / T-Shirt</p>
-        <h1>Red Printed T-Shirt by HRX</h1>
-        <h4>$50.00</h4>
-        <select>
-            <option>Select Size</option>
-            <option>XXL</option>
-            <option>XL</option>
-            <option>L</option>
-            <option>M</option>
-            <option>S</option>
-        </select>
-        <input type="number" value="1">
-        <a href="" class="btn">Add To Cart</a>
-
+        <p>{{ product.title }}</p>
+        <h1>{{ product.title }}</h1>
+        <h4>${{ product.price }}</h4>
+        <form method="post" action="{% url 'add_to_cart' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" value="{{ product.id }}" name="product_id"/>
+            <input type="number" name="quantity" value="1" min="1" required>
+            
+            <select name="size" required>
+                <option value="">Select Size</option>
+                <option value="1">S</option>
+                <option value="2">M</option>
+                <option value="3">L</option>
+                <option value="4">XL</option>
+                <option value="5">XXL</option>
+            </select>
+            
+            <button type="submit" class="btn">Add To Cart</button>
+        </form>
+        
         <h3>Product Details <i class="fa fa-indent"></i></h3>
         <br>
-        <p>Give your summer wardrobe a style upgrade with the HRX Men's Active T-Shirt. Team it with a pair of
-            shorts for your morning workout or a denims for an evening out with the guys.</p>
+        <p>{{ product.description }}</p>
     </div>
 </div>
 

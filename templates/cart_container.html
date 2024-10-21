@@ -1,71 +1,53 @@
 {% load static %}
-<table>
-    <tbody><tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Subtotal</th>
-    </tr>
-    <tr>
-        <td>
-            <div class="cart-info">
-                <img src="{% static 'images/buy-1.jpg' %}">
-                <div>
-                    <p>Red Printed T-Shirt</p>
-                    <small>Price: $50.00</small>
-                    <br>
-                    <a href="">Remove</a>
-                </div>
-            </div>
-        </td>
-        <td><input type="number" value="1"></td>
-        <td>$50.00</td>
-    </tr>
-    <tr>
-        <td>
-            <div class="cart-info">
-                <img src="{% static 'images/buy-2.jpg' %}">
-                <div>
-                    <p>Red Printed T-Shirt</p>
-                    <small>Price: $50.00</small>
-                    <br>
-                    <a href="">Remove</a>
-                </div>
-            </div>
-        </td>
-        <td><input type="number" value="1"></td>
-        <td>$50.00</td>
-    </tr>
-    <tr>
-        <td>
-            <div class="cart-info">
-                <img src="{% static 'images/buy-3.jpg' %}">
-                <div>
-                    <p>Red Printed T-Shirt</p>
-                    <small>Price: $50.00</small>
-                    <br>
-                    <a href="">Remove</a>
-                </div>
-            </div>
-        </td>
-        <td><input type="number" value="1"></td>
-        <td>$50.00</td>
-    </tr>
-</tbody></table>
-<div class="total-price">
-    <table>
-        <tbody><tr>
-            <td>Subtotal</td>
-            <td>$200.00</td>
-        </tr>
-        <tr>
-            <td>Tax</td>
-            <td>$35.00</td>
-        </tr>
-        <tr>
-            <td>Total</td>
-            <td>$230.00</td>
-        </tr>
-        <tr><td colspan="2"></td><td> <button>Confirm</button></td></tr>
-    </tbody></table>
-    
+{% load multiply %}
+{% load gettotal %}
+
+<div class="small-container cart-page">
+    {% if ordered_items %}
+        <table>
+            <tbody>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                </tr>
+                {% for cart_item in ordered_items %}
+                <tr>
+                    <td>
+                        <div class="cart-info">
+                            <img src="{{ cart_item.product.image.url }}">
+                            <div>
+                                <p>{{ cart_item.product.title }}</p>
+                                <small>Price: ${{ cart_item.product.price }}</small>
+                                <br>
+                                <a href="{% url 'remove_item' cart_item.id %}">Remove</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td><input type="number" disabled value="{{ cart_item.quantity }}"></td>
+                    <td>${% multiply cart_item.product.price cart_item.quantity %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="total-price">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Total</td>
+                        <td>${{ subtotal }}</td>
+                    </tr>
+                </tbody>
+            </table>
+           
+            <form action="{% url 'checkout' cart.id %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="total" value="{{ subtotal }}">
+                <button class="btn" type="submit">Checkout</button>
+            </form>
+            
+        </div>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
 </div>
