@@ -88,7 +88,7 @@ def show_orders(request):
         customer = user.customer_profile  # Try to get the customer profile
     except Customer.DoesNotExist:
         messages.error(request, "You need to create a customer profile first.")
-        return redirect('create_profile')  # Redirect to profile creation view
+        return redirect('cart')  # Redirect to profile creation view
 
     
     all_orders=Order.objects.filter(owner=customer).exclude(order_status=Order.CART_STAGE)
